@@ -2,7 +2,7 @@
 
 [![DevConnect](https://devconnectplatform.com/api/badge/azizulabedin)](https://devconnectplatform.com/u/azizulabedin?ref=badge)
 
-A small SQLite-backed API for events, seats, and orders. The seed creates 100 events with 100 seats each: 10,000 seats total.
+A PostgreSQL-backed API for events, seats, and orders on Vercel, with SQLite retained as a local development fallback. The seed creates 100 events with 100 seats each: 10,000 seats total.
 
 ## Run
 
@@ -15,6 +15,37 @@ npm start
 The API listens on `http://localhost:3000`.
 
 Open that address in a browser for the Seatline interface. It shows the API connection state, lets you load an event, click an available seat, and reserve it. The interface is served by the same API process from `public/`.
+
+## Vercel deployment
+
+The repository includes a Vercel function adapter in `api/index.js` and route rewrites in `vercel.json`.
+
+```powershell
+vercel login
+vercel
+vercel --prod
+```
+
+Vercel functions do not provide a persistent shared filesystem, so the deployed app uses PostgreSQL when `DATABASE_URL` is configured. SQLite remains available for local development only.
+
+### Add your PostgreSQL database
+
+Set the connection string as an environment variable. Do not commit it or paste it into source files.
+
+```powershell
+vercel env add DATABASE_URL production
+```
+
+Paste your PostgreSQL URL when prompted, then seed the remote database from your machine:
+
+```powershell
+$env:DATABASE_URL = "your-postgresql-url"
+npm run seed
+Remove-Item Env:DATABASE_URL
+vercel --prod
+```
+
+When `DATABASE_URL` exists, the API uses PostgreSQL transactions and `SELECT ... FOR UPDATE` row locking, so concurrent reservations cannot both claim one seat.
 
 ## Endpoints
 
