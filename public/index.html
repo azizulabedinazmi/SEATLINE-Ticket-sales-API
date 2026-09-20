@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Seatline | Ticket sales</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Seatline home"><span class="brand-mark">S</span><span>SEATLINE</span></a>
+      <div class="status" id="api-status"><span class="status-dot"></span><span id="status-text">Checking API...</span></div>
+    </header>
+
+    <section class="intro">
+      <p class="eyebrow">LIVE RESERVATION DESK</p>
+      <h1>Choose your view.</h1>
+      <p class="lede">A fast, no-fuss seat map for the moments when the good seats should stay yours.</p>
+    </section>
+
+    <section class="workspace" aria-label="Seat reservation workspace">
+      <aside class="controls">
+        <div class="section-label">01 / EVENT</div>
+        <label for="event-id">Event number</label>
+        <div class="event-input"><span>#</span><input id="event-id" type="number" min="1" value="1"></div>
+        <button class="secondary-button" id="load-seats" type="button">Load available seats <span aria-hidden="true">&#8594;</span></button>
+
+        <div class="rule"></div>
+        <div class="section-label">02 / GUEST</div>
+        <label for="customer-name">Your name</label>
+        <input class="text-input" id="customer-name" type="text" placeholder="e.g. Azizul Abedin" autocomplete="name">
+        <p class="helper">Pick a free seat, then confirm it below.</p>
+
+        <div class="selection-card" id="selection-card">
+          <span class="selection-label">Selected seat</span>
+          <strong id="selected-seat">None</strong>
+        </div>
+        <button class="reserve-button" id="reserve-seat" type="button" disabled>Reserve selected seat</button>
+        <p class="result" id="result" role="status"></p>
+      </aside>
+
+      <div class="map-panel">
+        <div class="map-heading">
+          <div><div class="section-label">SEAT MAP</div><h2 id="map-title">Event #1</h2></div>
+          <button class="icon-button" id="refresh-seats" type="button" title="Refresh seats" aria-label="Refresh seats">&#8635;</button>
+        </div>
+        <div class="legend"><span><i class="legend-swatch available"></i> Available</span><span><i class="legend-swatch reserved"></i> Reserved / chosen</span></div>
+        <div class="stage">STAGE</div>
+        <div class="seat-grid" id="seat-grid" aria-live="polite"><div class="loading">Loading seats...</div></div>
+      </div>
+    </section>
+
+    <footer><span>Seatline API / SQLite</span><a href="/LICENSE">MIT license</a></footer>
+  </main>
+</body>
+</html>
