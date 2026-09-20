@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const path = require('node:path');
 const usePostgres = Boolean(process.env.DATABASE_URL);
