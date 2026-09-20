@@ -14,6 +14,8 @@ npm start
 
 For local PostgreSQL, copy `.env.example` to `.env` and set `DATABASE_URL` there. The app loads `.env` automatically. Keep the real `.env` file private; it is excluded from Git.
 
+If a real database URL is ever committed or shared, rotate that database user's password immediately and replace the URL in Vercel environment variables.
+
 The API listens on `http://localhost:3000`.
 
 Open that address in a browser for the Seatline interface. It shows the API connection state, lets you load an event, click an available seat, and reserve it. The interface is served by the same API process from `public/`.

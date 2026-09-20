@@ -12,7 +12,7 @@ let selectedSeat = null;
 async function checkApi() {
   try {
     const response = await fetch('/health');
-    if (!response.ok) throw new Error('API unavailable');
+    if (!response.ok) throw new Error(`API returned HTTP ${response.status}`);
     statusPanel.className = 'status online';
     statusText.textContent = 'API online';
   } catch (error) {
@@ -36,7 +36,7 @@ async function loadSeats() {
   seatGrid.innerHTML = '<div class="loading">Loading seats...</div>';
   try {
     const response = await fetch(`/events/${eventId}/free-seats`);
-    const data = await response.json();
+    const data = await readApiResponse(response);
     if (!response.ok) throw new Error(data.error || 'Could not load seats');
     const available = new Set(data.seats.map((seat) => seat.seat_number));
     seatGrid.innerHTML = '';
@@ -73,7 +73,7 @@ async function reserveSeat() {
     const response = await fetch(`/events/${eventId}/seats/${selectedSeat}/reserve`, {
       method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ customerName })
     });
-    const data = await response.json();
+    const data = await readApiResponse(response);
     if (!response.ok) throw new Error(data.error || 'Reservation failed');
     setResult(`Reserved seat ${data.seatNumber}. Order #${data.orderId}.`);
     await loadSeats();
@@ -81,6 +81,15 @@ async function reserveSeat() {
     setResult(error.message, true);
     reserveButton.disabled = false;
   }
+}
+
+async function readApiResponse(response) {
+  const contentType = response.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    const body = await response.text();
+    throw new Error(`API returned HTTP ${response.status}: ${body.slice(0, 80)}`);
+  }
+  return response.json();
 }
 
 document.querySelector('#load-seats').addEventListener('click', loadSeats);
