@@ -1,3 +1,7 @@
+<p align="center">
+  <img src=".github/assets/banner.svg" alt="Seatline banner" width="100%">
+</p>
+
 # Ticket sales 
 
 [![DevConnect](https://devconnectplatform.com/api/badge/azizulabedin)](https://devconnectplatform.com/u/azizulabedin?ref=badge)
